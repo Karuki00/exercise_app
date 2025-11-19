@@ -9,10 +9,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Exercise App'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Exercise App'), elevation: 0),
       drawer: const AppDrawer(), // we'll create this in step 2
       body: Container(
         width: double.infinity,
@@ -49,7 +46,7 @@ class HomePage extends StatelessWidget {
                       color: Colors.black.withOpacity(0.06),
                       blurRadius: 12,
                       offset: const Offset(0, 6),
-                    )
+                    ),
                   ],
                 ),
                 child: Row(
@@ -61,35 +58,89 @@ class HomePage extends StatelessWidget {
                         color: const Color(0xFFF7EEF6),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.fitness_center, size: 44, color: Colors.deepPurple),
+                      child: const Icon(
+                        Icons.fitness_center,
+                        size: 44,
+                        color: Colors.deepPurple,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          Text('Explore Exercises', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          Text(
+                            'Explore Exercises',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           SizedBox(height: 6),
-                          Text('Browse exercises from ExerciseDB', style: TextStyle(color: Colors.grey)),
+                          Text(
+                            'Browse exercises from ExerciseDB',
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         ],
                       ),
                     ),
-                    const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 18,
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
             ),
 
-            const SizedBox(height: 24),
-
-            // Small quick tips row
+            // Quick actions
+            const SizedBox(height: 18),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _InfoTile(icon: Icons.timer, title: 'Short Workouts', subtitle: '10-20 min'),
-                const SizedBox(width: 12),
-                _InfoTile(icon: Icons.person, title: 'Body Focus', subtitle: 'Abs, Legs'),
-                const SizedBox(width: 12),
-                _InfoTile(icon: Icons.star_border, title: 'Favorites', subtitle: 'Save exercises'),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    // open search (we'll implement)
+                  },
+                  icon: const Icon(Icons.search),
+                  label: const Text('Search'),
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 12,
+                    ),
+                  ),
+                ),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    // open filter bottom sheet
+                  },
+                  icon: const Icon(Icons.filter_list),
+                  label: const Text('Filter'),
+                  style: OutlinedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 12,
+                    ),
+                  ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    // random exercise: fetch one and show detail
+                  },
+                  icon: const Icon(Icons.shuffle),
+                  label: const Text('Random'),
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 12,
+                    ),
+                  ),
+                ),
               ],
             ),
 
@@ -99,9 +150,12 @@ class HomePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Center(
-                child: Text('Made with ♥ • ExerciseDB', style: theme.textTheme.bodySmall),
+                child: Text(
+                  'Made with ♥ • ExerciseDB',
+                  style: theme.textTheme.bodySmall,
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -113,7 +167,11 @@ class _InfoTile extends StatelessWidget {
   final IconData icon;
   final String title, subtitle;
 
-  const _InfoTile({required this.icon, required this.title, required this.subtitle});
+  const _InfoTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -129,11 +187,20 @@ class _InfoTile extends StatelessWidget {
             Icon(icon, size: 28, color: Colors.deepPurple),
             const SizedBox(width: 10),
             Expanded(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-                const SizedBox(height: 4),
-                Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-              ]),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
