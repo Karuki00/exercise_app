@@ -1,3 +1,4 @@
+import 'package:exercise_app/widgets/summary_card.dart';
 import 'package:flutter/material.dart';
 import 'exercise_list_page.dart';
 import 'package:exercise_app/widgets/app_drawer.dart';
@@ -139,6 +140,55 @@ class HomePage extends StatelessWidget {
                       horizontal: 18,
                       vertical: 12,
                     ),
+                  ),
+                ),
+              ],
+            ),
+
+            // Summary cards
+            SizedBox(height: 20),
+
+            Row(
+              children: [
+                Expanded(
+                  child: SummaryCard(
+                    icon: Icons.fitness_center,
+                    title: "Today's Workout",
+                    value: "0 done",
+                    color: Colors.deepPurple,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: SummaryCard(
+                    icon: Icons.local_fire_department,
+                    title: "Calories",
+                    value: "0 kcal",
+                    color: Colors.orange,
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(height: 12),
+
+            Row(
+              children: [
+                Expanded(
+                  child: SummaryCard(
+                    icon: Icons.timer,
+                    title: "Workout Time",
+                    value: "0 min",
+                    color: Colors.blue,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: SummaryCard(
+                    icon: Icons.stars,
+                    title: "Streak",
+                    value: "0 days",
+                    color: Colors.green,
                   ),
                 ),
               ],
