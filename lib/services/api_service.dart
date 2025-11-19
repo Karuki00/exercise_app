@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:exercise_app/secret/api_key.dart';
 import 'package:http/http.dart' as http;
 import '../models/exercise.dart';
 
@@ -6,7 +7,7 @@ class ApiService {
   static const String baseUrl = "https://exercisedb.p.rapidapi.com/exercises";
 
   static const Map<String, String> headers = {
-    "X-RapidAPI-Key": "YOUR-API-KEY",
+    "X-RapidAPI-Key": ApiKey.key,
     "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
   };
 
