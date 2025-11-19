@@ -1,3 +1,4 @@
+import 'package:exercise_app/widgets/recommended_item.dart';
 import 'package:exercise_app/widgets/summary_card.dart';
 import 'package:flutter/material.dart';
 import 'exercise_list_page.dart';
@@ -192,6 +193,51 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+
+            // Reccommended section
+            SizedBox(height: 25),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "Recommended for You",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+
+            SizedBox(height: 14),
+
+            SizedBox(
+              height: 170,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.only(left: 16),
+                children: const [
+                  RecommendedItem(
+                    imageUrl:
+                        "https://wger.de/media/exercise-images/184/Crunches-1.png",
+                    name: "Crunches",
+                    muscle: "Abs",
+                  ),
+                  RecommendedItem(
+                    imageUrl:
+                        "https://wger.de/media/exercise-images/18/Bench-press-1.png",
+                    name: "Bench Press",
+                    muscle: "Chest",
+                  ),
+                  RecommendedItem(
+                    imageUrl:
+                        "https://wger.de/media/exercise-images/114/Deadlift-1.png",
+                    name: "Deadlift",
+                    muscle: "Lower Back",
+                  ),
+                ],
+              ),
             ),
 
             const Spacer(),
