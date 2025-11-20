@@ -1,8 +1,9 @@
-import 'package:exercise_app/widgets/recommended_item.dart';
 import 'package:exercise_app/widgets/summary_card.dart';
 import 'package:flutter/material.dart';
 import 'exercise_list_page.dart';
 import 'package:exercise_app/widgets/app_drawer.dart';
+import 'package:exercise_app/services/api_service.dart';
+import 'package:exercise_app/models/exercise.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -10,15 +11,15 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Exercise App'), elevation: 0),
-      drawer: const AppDrawer(), // we'll create this in step 2
+      drawer: const AppDrawer(),
       body: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 24),
         color: const Color(0xFFFBF4F8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           children: [
             const SizedBox(height: 28),
             Text('Welcome', style: theme.textTheme.headlineSmall),
@@ -29,7 +30,6 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 36),
 
-            // Big card with CTA
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -96,58 +96,30 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            // Quick actions
             const SizedBox(height: 18),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton.icon(
-                  onPressed: () {
-                    // open search (we'll implement)
-                  },
+                  onPressed: () {},
                   icon: const Icon(Icons.search),
                   label: const Text('Search'),
-                  style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 12,
-                    ),
-                  ),
                 ),
                 OutlinedButton.icon(
-                  onPressed: () {
-                    // open filter bottom sheet
-                  },
+                  onPressed: () {},
                   icon: const Icon(Icons.filter_list),
                   label: const Text('Filter'),
-                  style: OutlinedButton.styleFrom(
-                    shape: StadiumBorder(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 12,
-                    ),
-                  ),
                 ),
                 ElevatedButton.icon(
-                  onPressed: () {
-                    // random exercise: fetch one and show detail
-                  },
+                  onPressed: () {},
                   icon: const Icon(Icons.shuffle),
                   label: const Text('Random'),
-                  style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 12,
-                    ),
-                  ),
                 ),
               ],
             ),
 
-            // Summary cards
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             Row(
               children: [
@@ -159,7 +131,7 @@ class HomePage extends StatelessWidget {
                     color: Colors.deepPurple,
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: SummaryCard(
                     icon: Icons.local_fire_department,
@@ -171,7 +143,7 @@ class HomePage extends StatelessWidget {
               ],
             ),
 
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             Row(
               children: [
@@ -183,7 +155,7 @@ class HomePage extends StatelessWidget {
                     color: Colors.blue,
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: SummaryCard(
                     icon: Icons.stars,
@@ -195,109 +167,154 @@ class HomePage extends StatelessWidget {
               ],
             ),
 
-            // Reccommended section
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 "Recommended for You",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
                 ),
               ),
             ),
 
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
 
             SizedBox(
-              height: 170,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(left: 16),
-                children: const [
-                  RecommendedItem(
-                    imageUrl:
-                        "https://wger.de/media/exercise-images/184/Crunches-1.png",
-                    name: "Crunches",
-                    muscle: "Abs",
-                  ),
-                  RecommendedItem(
-                    imageUrl:
-                        "https://wger.de/media/exercise-images/18/Bench-press-1.png",
-                    name: "Bench Press",
-                    muscle: "Chest",
-                  ),
-                  RecommendedItem(
-                    imageUrl:
-                        "https://wger.de/media/exercise-images/114/Deadlift-1.png",
-                    name: "Deadlift",
-                    muscle: "Lower Back",
-                  ),
-                ],
+              height: 180,
+              child: FutureBuilder<List<Exercise>>(
+                future: ApiService.getExercises(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(child: Text("Error: ${snapshot.error}"));
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(
+                      child: Text("No recommendations found"),
+                    );
+                  }
+
+                  final exercises = snapshot.data!;
+
+                  return ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.only(left: 16),
+                    itemCount: exercises.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 12),
+                    itemBuilder: (_, i) {
+                      final ex = exercises[i];
+
+                      final imageUrl =
+                          "https://exercisedb.p.rapidapi.com/image?resolution=180&exerciseId=${ex.id}";
+
+                      return Container(
+                        width: 150,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: SizedBox(
+                                height: 90,
+                                width: double.infinity,
+
+                                // ⭐ Image WITH HEADERS (critical fix)
+                                child: Image.network(
+                                  imageUrl,
+                                  headers: ApiService.headers,
+                                  fit: BoxFit.cover,
+
+                                  // Placeholder
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return Container(
+                                          height: 90,
+                                          color: Colors.grey.shade200,
+                                          child: const Center(
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                            ),
+                                          ),
+                                        );
+                                      },
+
+                                  // Error fallback
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      height: 90,
+                                      color: Colors.grey.shade300,
+                                      child: const Icon(
+                                        Icons.broken_image,
+                                        color: Colors.grey,
+                                        size: 32,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 8),
+
+                            Text(
+                              ex.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+
+                            const SizedBox(height: 4),
+
+                            Text(
+                              ex.target,
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
 
-            const Spacer(),
+            const SizedBox(height: 40),
 
-            // Footer text
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Center(
-                child: Text(
-                  'Made with ♥ • ExerciseDB',
-                  style: theme.textTheme.bodySmall,
-                ),
+            Center(
+              child: Text(
+                'Made with ♥ • ExerciseDB',
+                style: theme.textTheme.bodySmall,
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-class _InfoTile extends StatelessWidget {
-  final IconData icon;
-  final String title, subtitle;
-
-  const _InfoTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 28, color: Colors.deepPurple),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                ],
-              ),
-            ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
