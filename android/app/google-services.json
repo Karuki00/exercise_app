@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "555511653468",
+    "project_id": "add-android-app-b658b",
+    "storage_bucket": "add-android-app-b658b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555511653468:android:a212d9f99b17269b703299",
+        "android_client_info": {
+          "package_name": "com.example.exercise_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555511653468-vujo2tqm34jin3itm8g3v7rhh2slld85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhADIDl8hlSrV3y1erAqdCnxxz87nHOks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555511653468-vujo2tqm34jin3itm8g3v7rhh2slld85.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
