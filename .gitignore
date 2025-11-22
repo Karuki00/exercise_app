@@ -46,6 +46,5 @@ app.*.map.json
 
 # Very Secret you will die if you commit
 lib/secret/
-
 # Firebase_option
 lib/firebase/
